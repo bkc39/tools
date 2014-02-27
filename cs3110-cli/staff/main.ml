@@ -1,4 +1,7 @@
+open Build
 open Constants
+open Clean
+open Doc
 open Postscript
 open IOUtil
 open FilepathUtil
