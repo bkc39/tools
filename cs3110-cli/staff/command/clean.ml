@@ -10,7 +10,7 @@ let clean_command =
     ~summary:"Removes all of the files generated durign compilation."
     ~readme:(fun () ->
       "The clean command is a wrapper for the clean utility of corebuild.")
-    Command.Spec.empty 
+    Command.Spec.empty
     clean
 
 let run_clean_command () =

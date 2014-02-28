@@ -9,7 +9,7 @@ exception InvalidDirectory of string
 let diff_tmp = ".diff"
 
 (** It is fascinating that Jane Street didn't include this in Core... *)
-let array_mem xs x = 
+let array_mem xs x =
   try let _ = Array.find_exn xs ~f:((=) x) in true
   with Not_found -> false
 
@@ -29,7 +29,7 @@ let get_nocompiles submission_dir nocompile_dir =
       "The desired submission directory:\n\t%s\nis invalid." submission_dir in
     raise (InvalidDirectory msg)
   end
-  (** No compile directory is invalid. *)  
+  (** No compile directory is invalid. *)
   | `Yes,`No | `Yes,`Unknown -> begin
     let msg = Printf.sprintf
       "The nocompile directory:\n\t%s\nis invalid." nocompile_dir in
@@ -108,7 +108,7 @@ let diff_student submit_dir resubmit_dir =
       "The desired submission directory:\n\t%s\nis invalid." submit_dir in
     raise (InvalidDirectory msg)
   end
-  (** Resubmission directory is invalid. *)  
+  (** Resubmission directory is invalid. *)
   | `Yes,`No | `Yes,`Unknown -> begin
     let msg = Printf.sprintf
       "The resubmission directory:\n\t%s\nis invalid." nocompile_dir in
@@ -120,7 +120,7 @@ let diff_student submit_dir resubmit_dir =
       if a=0 then 0 else begin
         diff_files file (Printf.sprintf "%s/%s" resubmit_dir file)
       end) ~init:1
-  end 
+  end
 
 
 (** [diff]'s each student in the nocompile directory in sequence. This
