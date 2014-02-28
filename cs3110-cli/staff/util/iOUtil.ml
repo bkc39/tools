@@ -1,5 +1,3 @@
-(* open Constants *)
-
 (**** i/o utilities ***********************************************************)
 
 (** [read_lines c] reads all lines from channel [c] into a list *)
