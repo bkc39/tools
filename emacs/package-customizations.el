@@ -6,7 +6,7 @@
 ;; file. Common package customization options can be found at the
 ;; Emacs wiki online.n
 
-(load "$HOME/.emacs.d/packages.el")
+(load "$HOME/.emacs.d/3110packages.el")
 
 ;; Sets the PATH environment variable
 (require 'exec-path-from-shell)
@@ -46,7 +46,7 @@
 
 ;; Sets the color theme
 (require 'color-theme)
-(color-theme-intitialize)
+(color-theme-initialize)
 ;; To view the avaialable color themes type M-x color-theme <TAB>
 ;; To choose the color theme type M-x color-theme-<color-theme-name> <RET>
 ;; When you decide on a color theme that suits you, you can set it to the
