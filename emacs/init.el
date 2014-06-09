@@ -6,91 +6,12 @@
 ;;   AucTeX Mode -- A package for writing and formatting TeX files.
 ;;   Color Theme -- A package for customizing the color theme of Emacs.
 ;;
-;; You can add additional packages to this configuration by the following
-;; (approximate) process
-;;
-;; 1. Download the desired package and move the directory to
-;;    ~/.emacs.d/<package-name>
-;; 2. Add the line:
-;;      (add-to-list 'load-path "~/.emacs.d/<package-name>)
-;;    To this file after the other similar lines below.
-;; 3. Add the line
-;;      (require '<package-name>)
-;;    to this file.
-;; 4. Add any additional configuration options for that package that you want
-;;    to this file. (optional)
-;;
-;; If the above steps don't work, check the documentation for the package you
-;; want on the Emacs wiki: http://www.emacswiki.org. (Usually googling the
-;; package name will point you here).
+;; This file also contains additional customizations to the general
+;; Emacs environment, rather than the package-specific customizations
+;; in package-customizations.el
 
-(add-to-list 'load-path "~/.emacs.d/tuareg-2.0.6")
-(add-to-list 'load-path "~/.emacs.d/auctex-11.87")
-(add-to-list 'load-path "~/.emacs.d/auctex-11.87/preview")
-(add-to-list 'load-path "~/.emacs.d/color-theme-6.6.0/")
-
-;; Sets the PATH environment variable.
-(setq path
-      "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/mysql/bin")
-(setenv "PATH" path)
-(setq exec-path (append exec-path '("/usr/local/bin")))
-
-;; This line adds the path to ocamlc to your Emacs PATH variable. However, it assumes
-;; that you installed OCaml throught the OPAM package management system. If the line
-;; below does not work correctly, type
-;;   $ which ocamlc
-;;   <desired-path-name>/ocamlc
-;;   $
-;; into your terminal and replace: "/Users/`whoami`/.opam/4.0.1/bin" with
-;; "<desired-path-name>".
-(setq exec-path (append exec-path '("/Users/`whoami`/.opam/4.0.1/bin")))
-
-;; Initialize Tuareg-mode for OCAML
-(autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
-(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
-(autoload 'tuareg-imenu-set-imenu "tuareg-imenu"
-  "Configuration of imenu for tuareg" t)
-(setq auto-mode-alist
-      (append '(("\\.ml[ily]?$" . tuareg-mode)
-                ("\\.topml$" . tuareg-mode))
-              auto-mode-alist))
-
-;; Adds /usr/texbin to the path
-(getenv "PATH")
-  (setenv "PATH"
-  (concat
-  "/usr/texbin" ":"
- (getenv "PATH")))
- (setq latex-run-command "pdflatex")
-
-;; Configures LaTeX environment
-(require 'tex-site)
-
-(load "auctex.el" nil t t)
-(require 'tex-mik)
-
-;; sets default compiler to pdflatex
-(setq TeX-engine 'pdflatex)
-
-;; enables preview-latex mode
-(add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
-(load "preview-latex.el" nil t t)
-
-;; sets default variables
-(setq TeX-auto-save t)
-(setq TeX-parse-self t)
-(setq TeX-save-query nil)
-(setq TeX-PDF-mode t)
-
-;; Initialized COLOR THEME MODE
-(require 'color-theme)
-(color-theme-initialize)
-;; To view the avaialable color themes type M-x color-theme <TAB>
-;; To choose the color theme type M-x color-theme-<color-theme-name> <RET>
-;; When you decide on a color theme that suits you, you can set it to the
-;; default by adding the line:
-;;   (color-theme-<color-theme-name>)
-;; To this file.
+;; Loads the customized packages
+(load "$HOME/.emacs.d/package-customizations.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;; ADDITIONAL CONFIGURATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -159,12 +80,6 @@
 
 ;; Get cursor to stop blinking
 ;; (blink-cursor-mode -1)
-
-;; Turn word 'lambda' into a lambda symbol
-;; (setq lambda-symbol (string (make-char 'greek-iso8859-7 107)))
-;; (mapatoms (lambda (sym)
-;;             (if (get sym 'disabled)
-;;                 (put sym 'disabled nil))))
 
 ; Jump to matching parenthesis
 ;; (defun match-paren (arg)
