@@ -63,6 +63,8 @@
 (setq echo-keystrokes 0.1)
 (setq delete-active-region nil)
 
+;; UNCOMMENT THE FOLLOWING TO ENABLE
+
 ;; Stop saving automatically
 ;;(setq auto-save-default nil)
 
