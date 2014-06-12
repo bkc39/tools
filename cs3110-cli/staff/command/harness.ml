@@ -190,17 +190,17 @@ let write_comments_to_cms cms_channel comments_file =
                ~f:(fun c -> if c = '"' then '\'' else c) in
   output_string cms_channel (Format.sprintf ",\"%s\"\n" comments)
 
-let harness test_dir target_dir () =
-  let targets = get_subdirectories target_dir in
+let harness target_dir test_dir () =
+  let all_targets = get_subdirectories target_dir in
   let () = assert_file_exists test_dir; ensure_dir output_dir in
   let cwd = Sys.getcwd () in
-  let directories = strip_trailing_slash_all targets in
+  let targets = strip_trailing_slash_all all_targets in
   let test_suite = test_files_from_directory test_dir in
   (* Ensure rubric *)
   let () = match Sys.file_exists rubric_file with
     | `Yes -> assert_valid_rubric ()
     | `No
-    | `Unknown -> create_rubric test_suite directories in
+    | `Unknown -> create_rubric test_suite targets in
   let rubric = dict_of_rubric_file rubric_file in
   let cms_chn = initialize_spreadsheet test_suite in
   (* For each implementation to test, copy in the tests, build, and run. *)
@@ -220,7 +220,7 @@ let harness test_dir target_dir () =
     points to CMS, dip out. *)
     Out_channel.close txt_chn;
     Sys.chdir cwd;
-    write_comments_to_cms cms_chn txt_fname) directories in
+    write_comments_to_cms cms_chn txt_fname) targets in
   Out_channel.close cms_chn
 
 let harness_command =
@@ -233,8 +233,8 @@ let harness_command =
     ])
     Command.Spec.(
     empty
-    +> anon (maybe_with_default "./tests" ("test-dir" %: file))
-    +> anon ("targets" %: file))
+    +> anon ("targets" %: file)
+    +> anon (maybe_with_default "./tests" ("test-dir" %: file)))
     harness
 
 let run_diff () =
