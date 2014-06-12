@@ -198,7 +198,7 @@ let harness target_dir test_dir () =
   let test_suite = test_files_from_directory test_dir in
   (* Ensure rubric *)
   let () = match Sys.file_exists rubric_file with
-    | `Yes -> assert_valid_rubric ()
+    | `Yes     -> assert_valid_rubric ()
     | `No
     | `Unknown -> create_rubric test_suite targets in
   let rubric = dict_of_rubric_file rubric_file in
@@ -207,7 +207,7 @@ let harness target_dir test_dir () =
   let () = List.iter ~f:(fun implementation_directory ->
     (* Prepare for testing *)
     let netid = tag_of_path implementation_directory in
-    let txt_fname = Format.sprintf "./%s/%s.md" output_dir netid in
+    let txt_fname = Format.sprintf "./%s/%s.ml" output_dir netid in
     let txt_chn = open_out txt_fname in
     (* Print netid to CMS, change to student dir *)
     let () = output_string cms_chn netid;
