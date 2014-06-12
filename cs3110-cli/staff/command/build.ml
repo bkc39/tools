@@ -43,6 +43,18 @@ let build ?with_exit_code:(with_exit_code = check_code) run_quiet main_module ()
     libraries    @
     if run_quiet then "-quiet"::ocamlbuild_flags else ocamlbuild_flags))
 
+let exit_code_of_build main_module =
+  let exit_code = ref None in
+  build ~with_exit_code:(fun code -> exit_code := Some code) true main_module ();
+  match !exit_code with
+  | Some code -> code
+  | None      -> begin
+    let err_msg =
+      Printf.sprintf "The build of '%s' failed to return an exit code"
+                     main_module in
+    failwith err_msg
+  end
+
 let build_command =
   Command.basic
     ~summary:"Compiles a file into a bytecode executable. Relies on ocamlbuild."
