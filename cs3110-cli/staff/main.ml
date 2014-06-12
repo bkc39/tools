@@ -7,6 +7,7 @@ open Postscript
 open IOUtil
 open FilepathUtil
 open ProcessUtil
+open Run
 
 (**** cs3110 commands *********************************************************)
 
