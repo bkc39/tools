@@ -13,3 +13,4 @@ val test_name_of_line : string -> string
 val get_extension : string -> string option
 val filter_by_extension : string -> string list -> string list
 val get_files_with_extension : string -> string -> string list
+val get_subdirectories : string -> string list
