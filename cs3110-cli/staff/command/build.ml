@@ -8,7 +8,7 @@ open ProcessUtil
 [with_exit_code] argument denotes what the program should do with the
 exit code of [ocamlbuild]. The toplevel command takes [with_exit_code
 = ProcessUtil.check_code]. Relies on [ocamlbuild]. *)
-let build with_exit_code run_quiet main_module () : unit =
+let build ?with_exit_code:(with_exit_code = check_code) run_quiet main_module () : unit =
   assert_file_exists (main_module ^ ".ml");
   let target = Format.sprintf "%s.d.byte" main_module in
   let _ = Format.printf "Compiling '%s.ml'\n%!" main_module in
@@ -57,7 +57,7 @@ let build_command =
       empty
       +> flag "-q" no_arg ~doc:"Run quietly."
       +> anon ("filename" %: file))
-    (build check_code)
+    build
 
 let run_build () =
   Command.run ~version:"2.0" ~build_info:"Core" build_command
