@@ -4,8 +4,11 @@ open IOUtil
 open FilepathUtil
 open ProcessUtil
 
-(** [build] compile [m] into a bytecode executable. Relies on ocamlbuild. *)
-let build run_quiet (main_module : string) (() : unit) : unit =
+(** [build] compile [m] into a bytecode executable. The
+[with_exit_code] argument denotes what the program should do with the
+exit code of [ocamlbuild]. The toplevel command takes [with_exit_code
+= ProcessUtil.check_code]. Relies on [ocamlbuild]. *)
+let build with_exit_code run_quiet main_module () : unit =
   assert_file_exists (main_module ^ ".ml");
   let target = Format.sprintf "%s.d.byte" main_module in
   let _ = Format.printf "Compiling '%s.ml'\n%!" main_module in
@@ -19,28 +22,30 @@ let build run_quiet (main_module : string) (() : unit) : unit =
     match Sys.file_exists opam_packages_file with
     | `No  | `Unknown -> []
     | `Yes            -> read_lines (open_in opam_packages_file) in
-  let opam_packages_str = String.concat ~sep:", "
-    (List.map all_opam_packages ~f:(fun p -> Format.sprintf "package(%s)" p)) in
+  let opam_packages_str =
+    String.concat ~sep:", "
+                  (List.map all_opam_packages
+                            ~f:(fun p -> Format.sprintf "package(%s)" p)) in
   let ocamlbuild_flags =  [
     "-cflag";
     "-warn-error";
     "-cflag";
     "+a";                             (* treat the default warnings as errors *)
     "-use-ocamlfind";
-    "-no-links"; 
+    "-no-links";
     "-tag-line"; "<*.ml{,i}> : syntax(camlp4o), " ^ opam_packages_str;
     "-tag-line"; "<*.d.byte> : " ^ opam_packages_str;
     "-tag-line"; "<*.native> : " ^ opam_packages_str;
     target
   ] in
-  check_code (run_process "ocamlbuild" (
+  with_exit_code (run_process "ocamlbuild" (
     dependencies @
     libraries    @
     if run_quiet then "-quiet"::ocamlbuild_flags else ocamlbuild_flags))
 
 let build_command =
   Command.basic
-    ~summary:"Compiles into a bytecode executable. Relies on ocamlbuild."
+    ~summary:"Compiles a file into a bytecode executable. Relies on ocamlbuild."
     ~readme:(fun () -> String.concat ~sep:"\n" [
       "The build command is a wrapper for the ocamlbuild tool. It takes the";
       "input file, resolves it's dependencies and compiles to a bytecode";
@@ -52,7 +57,7 @@ let build_command =
       empty
       +> flag "-q" no_arg ~doc:"Run quietly."
       +> anon ("filename" %: file))
-    build
-    
+    (build check_code)
+
 let run_build () =
   Command.run ~version:"2.0" ~build_info:"Core" build_command
