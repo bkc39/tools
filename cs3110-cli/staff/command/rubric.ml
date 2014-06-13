@@ -9,19 +9,19 @@ open IOUtil
 let assert_valid_line () : string -> unit =
   let lineno = ref 0 in
   (fun (raw_line : string) ->
-    let ln = String.strip raw_line in
-    let _ = incr lineno in
-    (* Valid lines are either comments, starting with an octothorp, or empty *)
-    let is_comment = (String.length ln = 0) || (ln.[0] = '#') in
-    (* Else they are 'key:val' pairs, with exactly one colon and non-whitespace strings on either end *)
-    let l_raw, r_raw = lsplit ln ':' in
-    let l, r = (String.strip l_raw), (String.strip r_raw) in
-    let has_two_colons = (String.contains r ':') in
-    let empty_field = (String.length l = 0) || (String.length r = 0) in
-    let right_not_int = try ignore(int_of_string r); false with Failure "int_of_string" -> true in
-    (* Else they are not valid lines *)
-    if (not is_comment) && (has_two_colons || empty_field || right_not_int) then
-      raise (Invalid_rubric (Format.sprintf "Rubric '%s' is not valid. Error on line %d" rubric_file (!lineno)) )
+   let ln = String.strip raw_line in
+   let _ = incr lineno in
+   (* Valid lines are either comments, starting with an octothorp, or empty *)
+   let is_comment = (String.length ln = 0) || (ln.[0] = '#') in
+   (* Else they are 'key:val' pairs, with exactly one colon and non-whitespace strings on either end *)
+   let l_raw, r_raw = lsplit ln ':' in
+   let l, r = (String.strip l_raw), (String.strip r_raw) in
+   let has_two_colons = (String.contains r ':') in
+   let empty_field = (String.length l = 0) || (String.length r = 0) in
+   let right_not_int = try ignore(int_of_string r); false with Failure "int_of_string" -> true in
+   (* Else they are not valid lines *)
+   if (not is_comment) && (has_two_colons || empty_field || right_not_int) then
+     raise (Invalid_rubric (Format.sprintf "Rubric '%s' is not valid. Error on line %d" rubric_file (!lineno)) )
   )
 
 (* Ensure the rubric file is correctly formatted *)
@@ -201,3 +201,18 @@ let reverse_dict (rubric_file : string) =
       Hashtbl.add_exn d ~key:name ~data:(should_pass, points)
   ) (read_lines (open_in rubric_file)) in
   d
+
+let rubric_command =
+  Command.basic
+    ~summary:"Create a rubric using the implementations in <sol-dir> to compile the tests."
+    ~readme:(fun () -> "TODO")
+    Command.Spec.(
+    empty
+    +> anon ("sol-dir" %: file))
+    (fun sol_dir () ->
+     assert_file_exists tests_dir;
+     let test_suite =
+       Array.fold_right (Sys.readdir tests_dir)
+                        ~init:[]
+                        ~f:(fun f acc -> strip_suffix f :: acc) in
+     create_rubric test_suite (get_subdirectories sol_dir))
