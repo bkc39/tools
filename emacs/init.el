@@ -44,7 +44,9 @@
 ;; Sets the initial prompt
 (setq
  initial-scratch-message
- ";; If you want to succeed in this class, your code must compile. - mgn29")
+ ";; I have no idea why this does what it does, but I'll write it
+;; down and maybe you can tell me.
+;;     - Dexter Kozen")
 
 ; Don't wrap lines
 (setq-default truncate-lines t)
