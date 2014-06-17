@@ -1,7 +1,7 @@
 LINK=$(dir $(shell which ocamlc))
 STD_LIB=`ocamlc -where`
 
-all: compile clean
+all: compile
 
 assertions:
 	ocamlfind ocamlc -package qcheck -a -o assertions.cma serializer.mli assertions.mli serializer.ml assertions.ml
@@ -9,11 +9,12 @@ assertions:
 	rm serializer.cmi serializer.cmo
 
 compile:
-	ocamlc -o cs3110-staff unix.cma cs3110_cli.mli cs3110_cli.ml
+	corebuild -Is include,assertions,util main.native
+	mv main.native cs3110-staff
 
 clean:
-	rm cs3110_cli.cmi
-	rm cs3110_cli.cmo
+	corebuild -clean
+	rm -rf _cms
 
 install: assertions compile clean
 

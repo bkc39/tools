@@ -46,14 +46,14 @@
 
 ;; Sets the color theme
 (require 'color-theme)
-(color-theme-intitialize)
-;; To view the available color themes type M-x color-theme <TAB>
+(color-theme-initialize)
+;; To view the avaialable color themes type M-x color-theme <TAB>
 ;; To choose the color theme type M-x color-theme-<color-theme-name> <RET>
 ;; When you decide on a color theme that suits you, you can set it to the
 ;; default by adding the line:
 ;;   (color-theme-<color-theme-name>)
-;; To this file. For example, I like zenburn-theme. You can add this to your packages by
-;; doing:
+;; to this file. For example, I like zenburn-theme. You can add this to
+;; your packages by doing:
 ;;   M-x package-install <RET> zenburn-theme
 ;; Then add:
 ;;   (load 'zenburn-theme t)
