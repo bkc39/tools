@@ -4,7 +4,7 @@
 ;; If you want to add additional package customizations, for example
 ;; if you installed a new package, you should do so in this
 ;; file. Common package customization options can be found at the
-;; Emacs wiki online.n
+;; Emacs wiki online.
 
 (load "$HOME/.emacs.d/3110packages.el")
 
